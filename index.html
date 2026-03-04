@@ -83,7 +83,10 @@ let adminPass=hh+mm;
 // ADMIN LOGIN
 if(code===adminPass){
 
+localStorage.setItem("adminSession","true");
+
 window.location="admin.html";
+
 return;
 
 }

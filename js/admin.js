@@ -1,4 +1,11 @@
-// ADMIN SESSION START
+// CHECK ADMIN SESSION
+if(localStorage.getItem("adminSession") !== "true"){
+
+window.location="index.html";
+
+}
+
+// ADMIN LOGIN TIME
 let loginTime = Date.now();
 
 // AUTO LOGOUT AFTER 5 MINUTES
@@ -10,15 +17,17 @@ if(now - loginTime > 300000){
 
 alert("Session expired. Admin logged out.");
 
-window.location="index.html";
+logout();
 
 }
 
 },5000);
 
 
-// LOGOUT BUTTON
+// LOGOUT FUNCTION
 function logout(){
+
+localStorage.removeItem("adminSession");
 
 window.location="index.html";
 
