@@ -1,23 +1,3 @@
-
-function login(){
-
-let user=document.getElementById("username").value;
-let pass=document.getElementById("password").value;
-
-let now=new Date();
-let hh=now.getHours().toString().padStart(2,'0');
-let mm=now.getMinutes().toString().padStart(2,'0');
-
-let correct=hh+mm;
-
-if(user==="admin" && pass===correct){
-window.location="index.html";
-}else{
-alert("Invalid Login");
-}
-
-}
-
 function createRoom(){
 
 let code=prompt("Enter secret room code");
@@ -32,21 +12,39 @@ loadRooms();
 
 }
 
+function deleteRoom(room){
+
+if(confirm("Delete room?")){
+db.ref("rooms/"+room).remove();
+}
+
+}
+
 function loadRooms(){
 
 db.ref("rooms").on("value",snap=>{
 
 let data=snap.val();
+
 let html="";
 
 for(let room in data){
 
 html+=`
-<div class="card p-2 mt-2">
-${room}
-<a href="chat.html?room=${room}" class="btn btn-success btn-sm">Open</a>
+<div class="card p-2 mb-2 d-flex justify-content-between">
+
+<b>${room}</b>
+
+<div>
+
+<a href="chat.html?room=${room}" class="btn btn-success btn-sm">Open Chat</a>
+
 <button onclick="deleteRoom('${room}')" class="btn btn-danger btn-sm">Delete</button>
-</div>`;
+
+</div>
+
+</div>
+`;
 
 }
 
@@ -56,12 +54,4 @@ document.getElementById("rooms").innerHTML=html;
 
 }
 
-function deleteRoom(room){
-
-db.ref("rooms/"+room).remove();
-
-}
-
-if(document.getElementById("rooms")){
 loadRooms();
-}

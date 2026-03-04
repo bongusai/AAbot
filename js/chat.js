@@ -1,4 +1,3 @@
-
 const params=new URLSearchParams(window.location.search);
 const room=params.get("room");
 
@@ -6,24 +5,34 @@ const user=localStorage.getItem("user")||"admin";
 
 function send(){
 
-let msg=document.getElementById("msg").value;
+let msg=document.getElementById("msg").value.trim();
 
-if(msg==="") return;
+if(!msg) return;
 
 db.ref("messages/"+room).push({
+
 text:msg,
 sender:user,
-time:Date.now(),
-seen:false
+time:Date.now()
+
 });
 
 document.getElementById("msg").value="";
 
 }
 
+document.getElementById("msg").addEventListener("keypress",function(e){
+
+if(e.key==="Enter"){
+send();
+}
+
+});
+
 db.ref("messages/"+room).on("value",snap=>{
 
 let data=snap.val();
+
 let html="";
 
 for(let id in data){
@@ -31,34 +40,32 @@ for(let id in data){
 let m=data[id];
 
 let date=new Date(m.time);
+
 let t=date.getHours()+":"+date.getMinutes();
 
-let tick=m.seen ? "✔✔":"✔";
+let cls=m.sender==="admin"?"msg-right":"msg-left";
 
 html+=`
-<div class="${m.sender==='admin'?'msg-admin':'msg-user'}">
+<div class="${cls}">
 ${m.text}
-<div class="time">${t} ${tick}</div>
-</div>`;
-
-db.ref("messages/"+room+"/"+id+"/seen").set(true);
+<div class="time">${t}</div>
+</div>
+`;
 
 }
 
 document.getElementById("messages").innerHTML=html;
 
+document.getElementById("messages").scrollTop=999999;
+
 });
 
-document.getElementById("msg").addEventListener("input",()=>{
-db.ref("typing/"+room).set(user+" typing...");
-});
+function deleteAll(){
 
-db.ref("typing/"+room).on("value",snap=>{
-document.getElementById("typing").innerText=snap.val()||"";
-});
+if(confirm("Delete all messages?")){
 
-setInterval(()=>{
 db.ref("messages/"+room).remove();
-},300000);
 
+}
 
+}
