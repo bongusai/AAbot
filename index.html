@@ -40,6 +40,8 @@ border-radius:10px;
 
 <button onclick="join()" class="btn btn-success mt-3 w-100">Open Chat</button>
 
+<div id="error" class="text-danger mt-2"></div>
+
 <hr>
 
 <h5>Telugu Songs</h5>
@@ -48,6 +50,9 @@ border-radius:10px;
 
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase.js"></script>
+<script src="js/firebase.js"></script>
+
 <script>
 
 function join(){
@@ -55,22 +60,46 @@ function join(){
 let code=document.getElementById("code").value.trim();
 
 if(!code){
-alert("Enter room code");
+document.getElementById("error").innerText="Enter room code";
 return;
 }
 
 let now=new Date();
-let pass=now.getHours().toString().padStart(2,'0')+
-         now.getMinutes().toString().padStart(2,'0');
 
-if(code===pass){
+let hh=now.getHours().toString().padStart(2,'0');
+let mm=now.getMinutes().toString().padStart(2,'0');
+
+let adminPass=hh+mm;
+
+// ADMIN LOGIN
+if(code===adminPass){
+
 window.location="admin.html";
-}else{
-localStorage.setItem("user","user"+Math.floor(Math.random()*1000));
-window.location="chat.html?room="+code;
-}
+return;
 
 }
+
+// CHECK ROOM EXISTS
+
+db.ref("rooms/"+code).once("value",snap=>{
+
+if(snap.exists()){
+
+localStorage.setItem("user","user"+Math.floor(Math.random()*1000));
+
+window.location="chat.html?room="+code;
+
+}else{
+
+document.getElementById("error").innerText="Invalid room code";
+
+}
+
+});
+
+}
+
+// RANDOM TELUGU SONG
 
 const videos=[
 "7kJYv1g6f88",
