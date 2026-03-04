@@ -1,6 +1,34 @@
+// ADMIN SESSION START
+let loginTime = Date.now();
+
+// AUTO LOGOUT AFTER 5 MINUTES
+setInterval(()=>{
+
+let now = Date.now();
+
+if(now - loginTime > 300000){
+
+alert("Session expired. Admin logged out.");
+
+window.location="index.html";
+
+}
+
+},5000);
+
+
+// LOGOUT BUTTON
+function logout(){
+
+window.location="index.html";
+
+}
+
+
+// CREATE ROOM
 function createRoom(){
 
-let code=prompt("Enter secret room code");
+let code = prompt("Enter secret room code");
 
 if(!code) return;
 
@@ -12,26 +40,32 @@ loadRooms();
 
 }
 
+
+// DELETE ROOM
 function deleteRoom(room){
 
 if(confirm("Delete room?")){
+
 db.ref("rooms/"+room).remove();
-}
 
 }
 
+}
+
+
+// LOAD ROOMS
 function loadRooms(){
 
 db.ref("rooms").on("value",snap=>{
 
-let data=snap.val();
+let data = snap.val();
 
 let html="";
 
 for(let room in data){
 
 html+=`
-<div class="card p-2 mb-2 d-flex justify-content-between">
+<div class="card p-2 mb-2 d-flex justify-content-between align-items-center">
 
 <b>${room}</b>
 
