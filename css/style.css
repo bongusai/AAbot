@@ -25,9 +25,11 @@ opacity:0.8;
 }
 
 .typing{
-font-size:12px;
-padding-left:10px;
-color:#555;
+font-size:13px;
+font-weight:bold;
+color:purple;
+margin:5px 10px;
+align-self:flex-start;
 }
 
 .delete-btn{

@@ -129,7 +129,7 @@ db.ref("messages/"+room+"/"+id+"/seen").set(true);
 
 }
 
-document.getElementById("messages").innerHTML=html;
+document.getElementById("messages").innerHTML=html + document.getElementById("typing").outerHTML;
 
 document.getElementById("messages").scrollTop=
 document.getElementById("messages").scrollHeight;
