@@ -1,7 +1,13 @@
-const params=new URLSearchParams(window.location.search);
-const room=params.get("room");
+const params = new URLSearchParams(window.location.search);
+const room = params.get("room");
 
-const user=localStorage.getItem("user")||"admin";
+// CURRENT USER
+let user = localStorage.getItem("user");
+
+if(!user){
+user="user"+Math.floor(Math.random()*10000);
+localStorage.setItem("user",user);
+}
 
 function send(){
 
@@ -21,6 +27,7 @@ document.getElementById("msg").value="";
 
 }
 
+// ENTER KEY SEND
 document.getElementById("msg").addEventListener("keypress",function(e){
 
 if(e.key==="Enter"){
@@ -43,9 +50,10 @@ let date=new Date(m.time);
 
 let t=date.getHours()+":"+date.getMinutes();
 
-let cls=m.sender==="admin"?"msg-right":"msg-left";
+// CHECK IF MESSAGE SENT BY CURRENT USER
+let cls = m.sender === user ? "msg-right" : "msg-left";
 
-html+=`
+html += `
 <div class="${cls}">
 ${m.text}
 <div class="time">${t}</div>
@@ -54,12 +62,14 @@ ${m.text}
 
 }
 
-document.getElementById("messages").innerHTML=html;
+document.getElementById("messages").innerHTML = html;
 
-document.getElementById("messages").scrollTop=999999;
+document.getElementById("messages").scrollTop =
+document.getElementById("messages").scrollHeight;
 
 });
 
+// DELETE ALL MESSAGES
 function deleteAll(){
 
 if(confirm("Delete all messages?")){
