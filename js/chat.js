@@ -102,9 +102,9 @@ let tick="";
 if(m.sender===user){
 
 if(m.seen){
-tick="✔✔";
+tick="<span class='tick seen'>✔✔</span>";
 }else{
-tick="✔";
+tick="<span class='tick'>✔</span>";
 }
 
 }
